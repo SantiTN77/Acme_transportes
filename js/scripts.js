@@ -56,3 +56,40 @@ function validarPersona() {
 function confirmarEliminar() {
     return confirm('¿Está seguro de que desea eliminar este registro?');
 }
+
+// Actualizar lista de conductores
+function actualizarConductores() {
+    const loading = document.getElementById('loading-conductores');
+    loading.style.display = 'block';
+    fetch('../ajax/get_data.php?type=conductores')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('id_conductor');
+            select.innerHTML = '<option value="">Seleccione un conductor...</option>';
+            data.forEach(conductor => {
+                const option = document.createElement('option');
+                option.value = conductor.id;
+                option.textContent = `${conductor.nombre} (CC: ${conductor.cedula})`;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error al actualizar conductores:', error))
+        .finally(() => loading.style.display = 'none');
+}
+
+// Actualizar lista de propietarios
+function actualizarPropietarios() {
+    fetch('../ajax/get_data.php?type=propietarios')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('id_propietario');
+            select.innerHTML = '<option value="">Seleccione un propietario...</option>';
+            data.forEach(propietario => {
+                const option = document.createElement('option');
+                option.value = propietario.id;
+                option.textContent = `${propietario.nombre} (CC: ${propietario.cedula})`;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error al actualizar propietarios:', error));
+}

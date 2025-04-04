@@ -1,7 +1,7 @@
 <?php
-include '../config/db.php';
-include '../includes/header.php';
-
+$base_path = dirname(dirname(__FILE__));
+include $base_path . '/config/db.php';
+include $base_path . '/includes/header.php';
 $mensaje = '';
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 

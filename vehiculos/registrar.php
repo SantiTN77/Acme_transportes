@@ -1,7 +1,7 @@
 <?php
-include '../config/db.php';
-include '../includes/header.php';
-
+$base_path = dirname(dirname(__FILE__));
+include $base_path . '/config/db.php';
+include $base_path . '/includes/header.php';
 $mensaje = '';
 
 // Obtener conductores y propietarios para los select
@@ -72,41 +72,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <div class="mb-3">
             <label for="id_conductor" class="form-label">Conductor *</label>
-            <select class="form-select" id="id_conductor" name="id_conductor" required>
-                <option value="">Seleccione un conductor...</option>
-                <?php 
-                if (mysqli_num_rows($result_conductores) > 0) {
-                    while ($conductor = mysqli_fetch_assoc($result_conductores)) {
-                        $nombre_completo = $conductor['primer_nombre'];
-                        if (!empty($conductor['segundo_nombre'])) {
-                            $nombre_completo .= ' ' . $conductor['segundo_nombre'];
+            <div class="d-flex align-items-center">
+            <div id="loading-conductores" style="display: none;">Cargando...</div>
+                <select class="form-select" id="id_conductor" name="id_conductor" required>
+                    <option value="">Seleccione un conductor...</option>
+                    <?php 
+                    if (mysqli_num_rows($result_conductores) > 0) {
+                        while ($conductor = mysqli_fetch_assoc($result_conductores)) {
+                            $nombre_completo = $conductor['primer_nombre'];
+                            if (!empty($conductor['segundo_nombre'])) {
+                                $nombre_completo .= ' ' . $conductor['segundo_nombre'];
+                            }
+                            $nombre_completo .= ' ' . $conductor['apellidos'];
+                            echo "<option value='" . $conductor['id_conductor'] . "'>" . $nombre_completo . " (CC: " . $conductor['cedula'] . ")</option>";
                         }
-                        $nombre_completo .= ' ' . $conductor['apellidos'];
-                        echo "<option value='" . $conductor['id_conductor'] . "'>" . $nombre_completo . " (CC: " . $conductor['cedula'] . ")</option>";
                     }
-                }
-                ?>
-            </select>
+                    ?>
+                </select>
+                <button type="button" class="btn btn-info ms-2" onclick="actualizarConductores()">Actualizar</button>
+            </div>
             <div class="form-text">Si el conductor no está registrado, <a href="../conductores/registrar.php" target="_blank">regístrelo aquí</a>.</div>
         </div>
         
         <div class="mb-3">
             <label for="id_propietario" class="form-label">Propietario *</label>
-            <select class="form-select" id="id_propietario" name="id_propietario" required>
-                <option value="">Seleccione un propietario...</option>
-                <?php 
-                if (mysqli_num_rows($result_propietarios) > 0) {
-                    while ($propietario = mysqli_fetch_assoc($result_propietarios)) {
-                        $nombre_completo = $propietario['primer_nombre'];
-                        if (!empty($propietario['segundo_nombre'])) {
-                            $nombre_completo .= ' ' . $propietario['segundo_nombre'];
+            <div class="d-flex align-items-center">
+                <select class="form-select" id="id_propietario" name="id_propietario" required>
+                    <option value="">Seleccione un propietario...</option>
+                    <?php 
+                    if (mysqli_num_rows($result_propietarios) > 0) {
+                        while ($propietario = mysqli_fetch_assoc($result_propietarios)) {
+                            $nombre_completo = $propietario['primer_nombre'];
+                            if (!empty($propietario['segundo_nombre'])) {
+                                $nombre_completo .= ' ' . $propietario['segundo_nombre'];
+                            }
+                            $nombre_completo .= ' ' . $propietario['apellidos'];
+                            echo "<option value='" . $propietario['id_propietario'] . "'>" . $nombre_completo . " (CC: " . $propietario['cedula'] . ")</option>";
                         }
-                        $nombre_completo .= ' ' . $propietario['apellidos'];
-                        echo "<option value='" . $propietario['id_propietario'] . "'>" . $nombre_completo . " (CC: " . $propietario['cedula'] . ")</option>";
                     }
-                }
-                ?>
-            </select>
+                    ?>
+                </select>
+                <button type="button" class="btn btn-info ms-2" onclick="actualizarPropietarios()">Actualizar</button>
+            </div>
+            <div class="form-text">Si el propietario no está registrado, <a href="../propietarios/registrar.php" target="_blank">regístrelo aquí</a>.</div>
+        </div>
             <div class="form-text">Si el propietario no está registrado, <a href="../propietarios/registrar.php" target="_blank">regístrelo aquí</a>.</div>
         </div>
         

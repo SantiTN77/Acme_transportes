@@ -1,0 +1,16 @@
+# Activar el manejo de errores
+Options -Indexes
+RewriteEngine On
+
+# Redirigir HTTP a HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Redirigir errores a una página personalizada
+ErrorDocument 500 /error.php
+ErrorDocument 404 /error.php
+
+# Permitir acceso a archivos y directorios existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
